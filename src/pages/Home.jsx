@@ -34,8 +34,8 @@ export const Home = () => {
           />
         </div>
         <div className="intro-text">
-          <h1>Najlepszy sklep dla pupsów</h1>
-          <h2>Kochamy pupsy i mamy dla nich super stuff</h2>
+          <h1>Najlepszy sklep dla puspów</h1>
+          <h2>Jesteśmy liderem na rynku ręcznie robionych ubrań i akcesorów dla psów</h2>
         </div>
       </section>
 

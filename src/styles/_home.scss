@@ -1,5 +1,5 @@
 $intro-background: #ffffff;
-$intro-text-color: #777;
+$intro-text-color: #c994d8;
 $recommended-product-bg: #fff;
 
 @mixin flex-center {
@@ -15,7 +15,7 @@ $recommended-product-bg: #fff;
 }
 
 .logo-container {
-  flex: 0 0 40%;
+  flex: 0 0 30%;
   display: flex;
   justify-content: center;
 }
@@ -27,7 +27,7 @@ $recommended-product-bg: #fff;
 
 .intro-text {
   flex: 1;
-  text-align: left;
+  text-align: center;
   padding-left: 20px;
 }
 
