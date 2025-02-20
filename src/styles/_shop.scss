@@ -1,0 +1,161 @@
+$shop-title-font-size: 32px;
+$shop-product-padding: 15px;
+$shop-product-border-color: #ddd;
+$shop-product-hover-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+@mixin product-style {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid $shop-product-border-color;
+  border-radius: 8px;
+  padding: $shop-product-padding;
+  background-color: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shop-product-hover-shadow;
+  }
+}
+
+.shop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.shoptitle {
+  font-size: $shop-title-font-size;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
+}
+
+.product {
+  @include product-style;
+}
+
+.product h3 {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.product p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.product img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.product button {
+  background-color: #c994d8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px; 
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+  background-color: #45a049;
+}
+
+.category-link {
+  background: #c994d8; 
+  color: white;
+  font-size: 14px;  
+  font-weight: bold;
+  padding: 10px 20px; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+  margin-right: 10px;
+  margin-bottom: 10px;
+
+  &:hover {
+    background: #8a4ea6; 
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: #8a4ea6; 
+    transform: translateY(0);
+  }
+}
+
+.pagination-button {
+  background: #c994d8; 
+  color: white;
+  font-size: 14px; 
+  font-weight: bold;
+  padding: 10px 20px; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background: #8a4ea6; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  &:disabled {
+    background: #d1c1e3; 
+    cursor: not-allowed;
+  }
+}
+
+.product a {
+  text-decoration: none; 
+}
+
+.product a h3,
+.product a p {
+  color: inherit; 
+}
+
+.product a h3 {
+  color: #333;
+}
+
+.product a p {
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .products {
+    grid-template-columns: 1fr 1fr;  
+  }
+
+  .product button {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+}
