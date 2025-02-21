@@ -12,11 +12,11 @@ This app was built using **React.js** and **Vite**, ensuring fast performance �
 
 ## 🛠️ Technologies
 
-- **React.js** – Frontend of the application 💻
-- **Vite** – Fast development environment ⚡
-- **React Router** – Navigation between pages 🔄
-- **Supabase** – Database, authentication, and storage 🗄️
-- **SCSS** – Application styling 🎨
+- **React.js** version 19.0.0 - Frontend of the application 💻
+- **Vite** – version 6.1.1 - Fast development environment ⚡
+- **React Router** version 7.1.3 - Navigation between pages 🔄
+- **Supabase** version 2.48.1 – Database, authentication, and storage 🗄️
+- **Saas** version 1.84.0 – Application styling 🎨
 
 
 ## 🎯 Features
