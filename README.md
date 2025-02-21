@@ -1,5 +1,5 @@
 
-# 🐩 Pups.store - Pet Accessories App 🛒 🛍
+# 🐩 Pups.store - Pet Accessories App 🛒 
 
 My first React project! 🚀  
 A web application for browsing and purchasing pet accessories. It allows users to view products, filter by categories, add items to the cart, and manage their shopping experience. 🐶🦮
@@ -8,6 +8,12 @@ A web application for browsing and purchasing pet accessories. It allows users t
 ## 📖 Project Description
 
 This app was built using **React.js** and **Vite**, ensuring fast performance ⚡ and an easy development environment 🛠️. **Supabase** was used for the backend, handling the database 📦 and storage.
+
+## 📡 Live Demo
+
+You can check out the live version of the app here:
+- 🔗 [Pups.store](https://pups-store.vercel.app/home) on Vercel 🚀
+
 
 
 ## 🛠️ Technologies
@@ -21,11 +27,11 @@ This app was built using **React.js** and **Vite**, ensuring fast performance �
 
 ## 🎯 Features
 
-- **📌 Home page** – View a welcome message 👋 and recommended products 🌟.
-- **📌 Shop page** – Browse and filter products 🛍️ by categories, view details 🧐, and add them to the cart 🛒.
-- **📌 Cart page** – See the quantity of products in the cart 🏷️, update quantities 🔢, remove items ❌, and view the order summary 📊.
-- **📌 Responsive design** – Fully responsive and works seamlessly on both mobile 📱 and desktop 💻 devices.
-- **📌 Navbar & Footer** – Easy navigation 🔽 through a sticky navbar and informative footer 📜.
+- ** Home page** – View a welcome message 👋 and recommended products 🌟.
+- ** Shop page** – Browse and filter products 🛍️ by categories, view details 🧐, and add them to the cart 🛒.
+- ** Cart page** – See the quantity of products in the cart 🏷️, update quantities 🔢, remove items ❌, and view the order summary 📊.
+- ** Responsive design** – Fully responsive and works seamlessly on both mobile 📱 and desktop 💻 devices.
+- ** Navbar & Footer** – Easy navigation 🔽 through a sticky navbar and informative footer 📜.
 
 
 ## 🦴 Project Structure
