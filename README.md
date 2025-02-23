@@ -1,5 +1,5 @@
 
-# 🐩 Pups.store - Pet Accessories App 🛒 
+# 🐩 Pups-store - Pet Accessories App 🛒 
 
 My first React project! 🚀  
 A web application for browsing and purchasing pet accessories. It allows users to view products, filter by categories, add items to the cart, and manage their shopping experience. 🐶🦮
@@ -12,7 +12,7 @@ This app was built using **React.js** and **Vite**, ensuring fast performance �
 ## 📡 Live Demo
 
 You can check out the live version of the app here:
-- 🔗 [Pups.store](https://pups-store.vercel.app/home) on Vercel 🚀
+- 🔗 [Pups-store](https://pups-store.vercel.app/home) on Vercel 🚀
 
 
 
