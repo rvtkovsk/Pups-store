@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../api/supabase";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid'; 
+import { v4 as uuidv4 } from 'uuid';
 
 export const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -26,9 +26,9 @@ export const Shop = () => {
   }, []);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId") || uuidv4(); 
+    const userId = localStorage.getItem("userId") || uuidv4();
     if (!localStorage.getItem("userId")) {
-      localStorage.setItem("userId", userId); 
+      localStorage.setItem("userId", userId);
     }
   }, []);
 
@@ -73,11 +73,14 @@ export const Shop = () => {
     }
   }
 
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const totalPages = Math.ceil(products.length / productsPerPage);
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   return (
     <div className="shop">

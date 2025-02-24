@@ -71,65 +71,69 @@ export const Cart = () => {
   return (
     <div className="cart">
       <h1>Twój koszyk</h1>
-      <table className="cart-table">
-        <thead>
-          <tr>
-            <th>Produkt</th>
-            <th>Cena</th>
-            <th>Ilość</th>
-            <th>Kwota</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartItems.map((item) => {
-            const product = getProductDetails(item.product_id);
-            return (
-              product && (
-                <tr key={item.id}>
-                  <td className="product-info">
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="product-image"
-                    />
-                    <span>{product.name}</span>
-                  </td>
-                  <td>{product.price} zł</td>
-                  <td>
-                    <div className="quantity-handler">
+      {cartItems.length === 0 ? (
+        <p>jest pusty :(</p>
+      ) : (
+        <table className="cart-table">
+          <thead>
+            <tr>
+              <th>Produkt</th>
+              <th>Cena</th>
+              <th>Ilość</th>
+              <th>Kwota</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => {
+              const product = getProductDetails(item.product_id);
+              return (
+                product && (
+                  <tr key={item.id}>
+                    <td className="product-info">
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="product-image"
+                      />
+                      <span>{product.name}</span>
+                    </td>
+                    <td>{product.price} zł</td>
+                    <td>
+                      <div className="quantity-handler">
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td>{(product.price * item.quantity).toFixed(2)} zł</td>
+                    <td>
                       <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
+                        className="remove-button"
+                        onClick={() => removeFromCart(item.id)}
                       >
-                        -
+                        Usuń
                       </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td>{(product.price * item.quantity).toFixed(2)} zł</td>
-                  <td>
-                    <button
-                      className="remove-button"
-                      onClick={() => removeFromCart(item.id)}
-                    >
-                      Usuń
-                    </button>
-                  </td>
-                </tr>
-              )
-            );
-          })}
-        </tbody>
-      </table>
+                    </td>
+                  </tr>
+                )
+              );
+            })}
+          </tbody>
+        </table>
+      )}
       <div className="total">
         <p>
           <strong>Razem: </strong>
