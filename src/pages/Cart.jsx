@@ -6,110 +6,67 @@ export const Cart = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const getUserId = () => localStorage.getItem("userId");
+
   useEffect(() => {
-    // Pobranie wszystkich produktów z tabeli "products"
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("products").select("*");
-      if (error) {
-        console.error("Błąd pobierania produktów:", error.message);
-      } else {
-        setProducts(data); // Aktualizacja stanu produktów
-      }
+      if (!error) setProducts(data);
+      else console.error("Error fetching products:", error);
     };
 
-    // Pobranie wszystkich produktów z koszyka z tabeli "cart"
     const fetchCartItems = async () => {
-      const { data, error } = await supabase.from("cart").select("*");
-      if (error) {
-        console.error("Błąd pobierania produktów z koszyka:", error.message);
-      } else {
-        setCartItems(data); // Aktualizacja stanu koszyka
-      }
+      const userId = getUserId();
+      const { data, error } = await supabase
+        .from("cart")
+        .select("*")
+        .eq("user_id", userId);
+
+      if (!error) setCartItems(data);
+      else console.error("Error fetching cart items:", error);
     };
 
-    // Pobranie danych produktów i koszyka
     const fetchData = async () => {
       await Promise.all([fetchProducts(), fetchCartItems()]);
-      setIsLoading(false); // Po pobraniu danych wyłączam tryb ładowania
+      setIsLoading(false);
     };
-
     fetchData();
-  }, []); 
+  }, []);
 
-  // Funkcja pomocnicza do pobierania szczegółów produktu na podstawie ID
-  const getProductDetails = (productId) => {
-    return products.find((product) => product.id === productId);
-  };
+  const getProductDetails = (productId) =>
+    products.find((p) => p.id === productId);
 
-  // Usunięcie produktu z koszyka
   const removeFromCart = async (cartItemId) => {
     const { error } = await supabase.from("cart").delete().eq("id", cartItemId);
-    if (error) {
-      console.error("Błąd podczas usuwania produktu z koszyka:", error);
-    } else {
-      setCartItems(cartItems.filter((item) => item.id !== cartItemId)); // Aktualizacja stanu
-    }
+    if (!error)
+      setCartItems(cartItems.filter((item) => item.id !== cartItemId));
+    else console.error("Error removing item from cart:", error);
   };
 
-  // Zwiększenie ilości produktu w koszyku
-  const increaseQuantity = async (cartItemId, currentQuantity) => {
-    const updatedQuantity = currentQuantity + 1;
+  const updateQuantity = async (cartItemId, newQuantity) => {
+    if (newQuantity < 1) return removeFromCart(cartItemId);
+
     const { error } = await supabase
       .from("cart")
-      .update({ quantity: updatedQuantity })
+      .update({ quantity: newQuantity })
       .eq("id", cartItemId);
 
-    if (error) {
-      console.error("Błąd przy zwiększaniu ilości produktu:", error);
-    } else {
+    if (!error)
       setCartItems(
         cartItems.map((item) =>
-          item.id === cartItemId ? { ...item, quantity: updatedQuantity } : item
+          item.id === cartItemId ? { ...item, quantity: newQuantity } : item
         )
       );
-    }
+    else console.error("Error updating quantity:", error);
   };
 
-  // Zmniejszenie ilości produktu w koszyku lub usunięcie jeśli ilość = 1
-  const decreaseQuantity = async (cartItemId, currentQuantity) => {
-    if (currentQuantity > 1) {
-      const updatedQuantity = currentQuantity - 1;
-      const { error } = await supabase
-        .from("cart")
-        .update({ quantity: updatedQuantity })
-        .eq("id", cartItemId);
-
-      if (error) {
-        console.error("Błąd przy zmniejszaniu ilości produktu:", error);
-      } else {
-        setCartItems(
-          cartItems.map((item) =>
-            item.id === cartItemId
-              ? { ...item, quantity: updatedQuantity }
-              : item
-          )
-        );
-      }
-    } else {
-      removeFromCart(cartItemId); // Usunięcie produktu jeśli ilość wynosi 1
-    }
-  };
-
-  // Obliczenie łącznej ceny produktów w koszyku
-  const calculateTotalPrice = () => {
-    return cartItems.reduce((total, item) => {
+  const calculateTotalPrice = () =>
+    cartItems.reduce((total, item) => {
       const product = getProductDetails(item.product_id);
-      if (product) {
-        return total + product.price * item.quantity;
-      }
-      return total;
+      return product ? total + product.price * item.quantity : total;
     }, 0);
-  };
 
-  // Wyświetlenie komunikatu ładowania
-  if (isLoading) {
-    return <div>Ładowanie...</div>;
-  }
+  if (isLoading) return <div>Ładowanie...</div>;
 
   return (
     <div className="cart">
@@ -126,10 +83,7 @@ export const Cart = () => {
         </thead>
         <tbody>
           {cartItems.map((item) => {
-            // Pobranie danych produktu dla każdego elementu koszyka
             const product = getProductDetails(item.product_id);
-            const totalPriceForItem = product ? product.price * item.quantity : 0;
-
             return (
               product && (
                 <tr key={item.id}>
@@ -145,19 +99,23 @@ export const Cart = () => {
                   <td>
                     <div className="quantity-handler">
                       <button
-                        onClick={() => decreaseQuantity(item.id, item.quantity)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
                       >
                         -
                       </button>
                       <span>{item.quantity}</span>
                       <button
-                        onClick={() => increaseQuantity(item.id, item.quantity)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                       >
                         +
                       </button>
                     </div>
                   </td>
-                  <td>{totalPriceForItem.toFixed(2)} zł</td>
+                  <td>{(product.price * item.quantity).toFixed(2)} zł</td>
                   <td>
                     <button
                       className="remove-button"
@@ -172,9 +130,11 @@ export const Cart = () => {
           })}
         </tbody>
       </table>
-      <div className="cart-summary">
-        <h3>Łączna kwota: {calculateTotalPrice().toFixed(2)} zł</h3>
-        <button className="checkout-button">Przejdź do kasy</button>
+      <div className="total">
+        <p>
+          <strong>Razem: </strong>
+          {calculateTotalPrice().toFixed(2)} zł
+        </p>
       </div>
     </div>
   );

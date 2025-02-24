@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../api/supabase";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid'; 
 
 export const Shop = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
@@ -15,13 +15,10 @@ export const Shop = () => {
       const { data, error } = await supabase.from("products").select("*");
 
       if (error) {
-        console.error("Błąd pobierania produktów:", error.message);
+        console.error("Error fetching products:", error.message);
       } else {
         setProducts(data);
-
-        const uniqueCategories = [
-          ...new Set(data.map((item) => item.category)),
-        ];
+        const uniqueCategories = [...new Set(data.map((item) => item.category))];
         setCategories(uniqueCategories);
       }
     };
@@ -29,33 +26,23 @@ export const Shop = () => {
   }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      let query = supabase.from("products").select("*");
-
-      if (selectedCategory) {
-        query = query.eq("category", selectedCategory);
-      }
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Błąd pobierania produktów:", error.message);
-      } else {
-        setProducts(data);
-        setCurrentPage(1);
-      }
-    };
-    fetchProducts();
-  }, [selectedCategory]);
+    const userId = localStorage.getItem("userId") || uuidv4(); 
+    if (!localStorage.getItem("userId")) {
+      localStorage.setItem("userId", userId); 
+    }
+  }, []);
 
   async function addToCart(productId) {
+    const userId = localStorage.getItem("userId");
+
     const { data: cartItems, error } = await supabase
       .from("cart")
       .select("*")
-      .eq("product_id", productId);
+      .eq("product_id", productId)
+      .eq("user_id", userId);
 
     if (error) {
-      console.error("Błąd przy pobieraniu produktów z koszyka:", error);
+      console.error("Error fetching cart items:", error);
       return;
     }
 
@@ -69,29 +56,26 @@ export const Shop = () => {
         .eq("id", existingItem.id);
 
       if (error) {
-        console.error("Błąd przy aktualizacji ilości produktu:", error);
+        console.error("Error updating product quantity:", error);
       } else {
-        console.log("Ilość produktu zaktualizowana:", data);
+        console.log("Product quantity updated:", data);
       }
     } else {
       const { data, error } = await supabase
         .from("cart")
-        .insert([{ product_id: productId, quantity: 1 }]);
+        .insert([{ product_id: productId, quantity: 1, user_id: userId }]);
 
       if (error) {
-        console.error("Błąd podczas dodawania do koszyka:", error);
+        console.error("Error adding product to cart:", error);
       } else {
-        console.log("Produkt dodany do koszyka:", data);
+        console.log("Product added to cart:", data);
       }
     }
   }
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
   const totalPages = Math.ceil(products.length / productsPerPage);
 
@@ -99,10 +83,7 @@ export const Shop = () => {
     <div className="shop">
       <h1 className="shoptitle">Kup coś dla swojego pupsa</h1>
       <div className="category-links">
-        <button
-          onClick={() => setSelectedCategory("")}
-          className={`category-link ${!selectedCategory ? "active" : ""}`}
-        >
+        <button onClick={() => setSelectedCategory("")} className={`category-link ${!selectedCategory ? "active" : ""}`}>
           WSZYSTKIE
         </button>
 
@@ -111,9 +92,7 @@ export const Shop = () => {
             <button
               key={index}
               onClick={() => setSelectedCategory(category)}
-              className={`category-link ${
-                selectedCategory === category ? "active" : ""
-              }`}
+              className={`category-link ${selectedCategory === category ? "active" : ""}`}
             >
               {category.toUpperCase()}
             </button>
@@ -128,43 +107,26 @@ export const Shop = () => {
             <div key={product.id} className="product">
               <Link to={`/product/${product.id}`}>
                 {product.image_url && (
-                  <img
-                    src={product.image_url}
-                    alt={product.name}
-                    className="product-image"
-                  />
+                  <img src={product.image_url} alt={product.name} className="product-image" />
                 )}
                 <h3>{product.name}</h3>
                 <p>Cena: {product.price} PLN</p>
               </Link>
-              <button onClick={() => addToCart(product.id)}>
-                Dodaj do koszyka
-              </button>
+              <button onClick={() => addToCart(product.id)}>Dodaj do koszyka</button>
             </div>
           ))
         ) : (
           <p>Brak produktów do wyświetlenia.</p>
         )}
       </div>
-      ;
       <div className="pagination">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="pagination-button"
-        >
+        <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="pagination-button">
           ‹ Poprzednia
         </button>
         <span className="page-number">
           {currentPage} / {totalPages}
         </span>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-          className="pagination-button"
-        >
+        <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="pagination-button">
           Następna ›
         </button>
       </div>
