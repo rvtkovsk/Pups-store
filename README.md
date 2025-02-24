@@ -27,11 +27,11 @@ You can check out the live version of the app here:
 
 ## 🎯 Features
 
-- ** Home page** – View a welcome message 👋 and recommended products 🌟.
-- ** Shop page** – Browse and filter products 🛍️ by categories, view details 🧐, and add them to the cart 🛒.
-- ** Cart page** – See the quantity of products in the cart 🏷️, update quantities 🔢, remove items ❌, and view the order summary 📊.
-- ** Responsive design** – Fully responsive and works seamlessly on both mobile 📱 and desktop 💻 devices.
-- ** Navbar & Footer** – Easy navigation 🔽 through a sticky navbar and informative footer 📜.
+- **Home page** – View a welcome message 👋 and recommended products 🌟.
+- **Shop page** – Browse and filter products 🛍️ by categories, view details 🧐, and add them to the cart 🛒.
+- **Cart page** – See the quantity of products in the cart 🏷️, update quantities 🔢, remove items ❌, and view the order summary 📊.
+- **Responsive design** – Fully responsive and works seamlessly on both mobile 📱 and desktop 💻 devices.
+- **Navbar & Footer** – Easy navigation 🔽 through a sticky navbar and informative footer 📜.
 
 
 ## 🦴 Project Structure
